@@ -209,17 +209,17 @@ class XMLtoJSON(views.View):
     
     def fill_address_fields(self, template: dict, Address: etree._Element, prefix: str='') -> None:
         parts = self.get_subelement(Address, 'FullAddr').text.split(',')
-        template[prefix+'address_txt1'] = parts[0]
-        template[prefix+'address_txt2'] = parts[1]
-        template[prefix+'address_txt3'] = parts[2]
-        template[prefix+'address_txt4'] = parts[3]
-        template[prefix+'street'] = parts[4]
-        template[prefix+'house'] = parts[5]
-        template[prefix+'building'] = parts[6]
-        template[prefix+'letter'] = parts[7]
-        template[prefix+'building2'] = parts[8]
-        template[prefix+'flat'] = parts[9]
-        template[prefix+'post_index'] = parts[10]
+        template[prefix+'address_txt1'] = parts[0] or None
+        template[prefix+'address_txt2'] = parts[1] or None
+        template[prefix+'address_txt3'] = parts[2] or None
+        template[prefix+'address_txt4'] = parts[3] or None
+        template[prefix+'street'] = parts[4] or None
+        template[prefix+'house'] = parts[5] or None
+        template[prefix+'building'] = parts[6] or None
+        template[prefix+'letter'] = parts[7] or None
+        template[prefix+'building2'] = parts[8] or None
+        template[prefix+'flat'] = parts[9] or None
+        template[prefix+'post_index'] = parts[10] or None
 
     def fill_address_list(self, template: dict, Entrant: etree._Element) -> etree._Element:
         AddressList = self.get_subelement(Entrant, 'AddressList')
@@ -247,6 +247,7 @@ class XMLtoJSON(views.View):
             self.set_value(template, 'passport_issued_by', Document, 'DocOrganization')
 
     def fill_template(self, Entrant: etree.Element, template: dict) -> None:
+        self.set_value(template, 'user_id', Entrant, 'IdObject', int)
         self.set_value(template, 'service_entrant_guid', Entrant, 'Guid')
         snls = self.get_subelement(Entrant, 'Snils')
         template['is_without_snils'] = (snls is None)
